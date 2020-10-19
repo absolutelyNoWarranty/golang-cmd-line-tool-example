@@ -17,8 +17,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
+
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -29,16 +30,13 @@ var cfgFile string
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "golang-command-line-tool-example",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Brief  description. The `Short` field in the `cobra.Command` struct which defines this command (the root command).",
+	Long:  "A longer description. The `Long` field in the `cobra.Command` struct which defines this command (the root command).",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("This is the result of running the rootCmd. It is defined in the `Run` field of the `cobra.Command` struct which defines rootCmd")
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -51,13 +49,21 @@ func Execute() {
 }
 
 func init() {
+	fmt.Println("[TRACE] Inside the init() func of root.go Cobra will automatically call this function to set things up.")
+
+	fmt.Println("[TRACE] Call OnInitialize with the initConfig function.")
 	cobra.OnInitialize(initConfig)
 
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.golang-command-line-tool-example.yaml)")
+	rootCmd.PersistentFlags().StringVar(
+		&cfgFile,
+		"config",
+		"",
+		"An example of a persistent flag (global) rootCmd.PersistentFlags(). We will use this flag to represent a passed in config filepath",
+	)
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
@@ -66,10 +72,13 @@ func init() {
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	fmt.Println("[TRACE] initConfig() Use viper to bind values to our program's defined flags. That is to say, \"load the config\".")
 	if cfgFile != "" {
 		// Use config file from the flag.
+		fmt.Println("[TRACE] The config flag was used.")
 		viper.SetConfigFile(cfgFile)
 	} else {
+		fmt.Println("[TRACE] The config flag was not used.")
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
