@@ -17,23 +17,24 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/spf13/cobra"
 )
 
+func timeCmdAction(cmd *cobra.Command, args []string) {
+	fmt.Println("[TRACE] timeCmdAction")
+	fmt.Println("[TRACE] functions passed to cobra.Command's Run field take a *cobra.Command pointer and a slice of strings []string")
+
+	fmt.Println(time.Now())
+}
+
 // timeCmd represents the time command
 var timeCmd = &cobra.Command{
 	Use:   "time",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("time called")
-	},
+	Short: "A brief description of the 'time' command (cmd/time.go). Defined in the `Short` field of timeCmd var",
+	Long:  "Prints the current time then exits. This long description of 'time' (cmd/time.go) is defined in the `Long` field of timeCmd var",
+	Run:   timeCmdAction,
 }
 
 func init() {
