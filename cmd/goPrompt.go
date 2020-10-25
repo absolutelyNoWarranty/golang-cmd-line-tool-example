@@ -51,13 +51,13 @@ func handleExit() {
 }
 
 func makeCompleter(words []string) func(prompt.Document) []prompt.Suggest {
-	fmt.Println(words)
+
 	return func(d prompt.Document) []prompt.Suggest {
 		suggestions := make([]prompt.Suggest, len(words))
 		for i := 0; i < len(words); i++ {
 			suggestions[i] = prompt.Suggest{Text: words[i], Description: "Something you typed previously"}
 		}
-		fmt.Println(suggestions)
+
 		return prompt.FilterHasPrefix(suggestions, d.GetWordBeforeCursor(), true)
 	}
 }
@@ -76,6 +76,9 @@ var goPromptCmd = &cobra.Command{
 			t := prompt.Input("> ", makeCompleter(history))
 			fmt.Println("You said: " + t)
 			history = append(history, t)
+			if t == "exit" {
+				return
+			}
 		}
 	},
 }
